@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageRazor — Digital Bookstore | Ebooks &amp; Audio Books</title>
+  
+  <!-- SEO & Open Graph Meta Tags -->
+  <meta name="description" content="PageRazor — Ideas worth reading. Stories worth hearing. Discover high-leverage ebooks and immersive audio editions for modern thinkers and builders.">
+  <meta name="keywords" content="ebooks, audio books, digital bookstore, PDF books, audio learning, PageRazor">
+  <meta name="author" content="PageRazor">
+  <meta name="theme-color" content="#FAF8F5">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PageRazor — Ideas worth reading. Stories worth hearing.">
+  <meta property="og:description" content="Discover curated digital ebooks and studio-recorded audio books with instant delivery.">
+  <meta property="og:image" content="assets/covers/book-001.svg">
+
+  <!-- Typography: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Accessible Skip to Main Content Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ========================================================================
+       Site Header
+       ======================================================================== -->
+  <header class="site-header" id="site-header" role="banner">
+    <div class="container header-container">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo" aria-label="PageRazor Home">
+        <span class="brand-icon-mark" aria-hidden="true">P</span>
+        <span class="brand-name">Page<span>Razor</span></span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav" aria-label="Primary Navigation">
+        <a href="#hero-section" class="nav-link active">Home</a>
+        <a href="#catalog-section" class="nav-link" onclick="scrollToCatalog('ebook'); return false;">Books</a>
+        <a href="#catalog-section" class="nav-link" onclick="scrollToCatalog('audio'); return false;">Audio Books</a>
+        <a href="#about-section" class="nav-link">About</a>
+        <a href="#faq-section" class="nav-link">FAQ</a>
+      </nav>
+
+      <!-- Header Action Controls -->
+      <div class="header-actions">
+        
+        <!-- Search Quick Anchor -->
+        <button type="button" class="header-icon-btn" onclick="document.getElementById('search-input').focus(); scrollToCatalog();" title="Search books" aria-label="Search bookstore">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <!-- User Authentication / Account State -->
+        <div class="nav-auth-guest">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="openAuthModal('login')" aria-label="Sign In or Register">
+            Login
+          </button>
+        </div>
+
+        <div class="nav-auth-user is-hidden">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="openAccountModal('account')" aria-label="Open My Account">
+            👤 <span class="user-display-name">Account</span>
+          </button>
+        </div>
+
+        <!-- Cart Drawer Trigger Button -->
+        <button type="button" class="header-icon-btn" onclick="openCart()" title="View Cart" aria-label="View shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count-badge is-hidden" aria-label="0 items in cart">0</span>
+        </button>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button type="button" class="hamburger-btn" id="hamburger-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer & Backdrop -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" aria-hidden="true"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <div class="brand-logo">
+        <span class="brand-icon-mark" aria-hidden="true">P</span>
+        <span class="brand-name">Page<span>Razor</span></span>
+      </div>
+      <button type="button" class="drawer-close-btn" onclick="closeAllOverlays()" aria-label="Close menu">&times;</button>
+    </div>
+
+    <nav class="mobile-nav-links" aria-label="Mobile Navigation">
+      <a href="#hero-section" onclick="closeAllOverlays()">Home</a>
+      <a href="#catalog-section" onclick="closeAllOverlays(); scrollToCatalog('ebook');">Books</a>
+      <a href="#catalog-section" onclick="closeAllOverlays(); scrollToCatalog('audio');">Audio Books</a>
+      <a href="#about-section" onclick="closeAllOverlays()">About PageRazor</a>
+      <a href="#faq-section" onclick="closeAllOverlays()">FAQ</a>
+      <a href="#account" onclick="closeAllOverlays(); openLibraryView();">My Library</a>
+    </nav>
+
+    <div class="mobile-drawer-footer">
+      <div class="nav-auth-guest">
+        <button type="button" class="btn btn-primary btn-block" onclick="closeAllOverlays(); openAuthModal('login');">
+          Sign In / Create Account
+        </button>
+      </div>
+      <div class="nav-auth-user is-hidden">
+        <button type="button" class="btn btn-secondary btn-block" onclick="closeAllOverlays(); openAccountModal('account');">
+          My Account (<span class="user-display-name">User</span>)
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================
+       Main Content Container
+       ======================================================================== -->
+  <main id="main-content">
+
+    <!-- 1. HERO SECTION -->
+    <section class="hero-section" id="hero-section">
+      <div class="container hero-grid">
+        
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>Digital Bookstore &amp; Audio Library</span>
+          </div>
+
+          <h1 class="hero-title">
+            Ideas worth reading.<br>
+            <span class="hero-title-highlight">Stories worth hearing.</span>
+          </h1>
+
+          <p class="hero-description">
+            PageRazor delivers actionable digital ebooks and studio-mastered audiobooks built for modern creators, thinkers, and builders. Instant digital delivery with lifetime access.
+          </p>
+
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary btn-lg" onclick="scrollToCatalog('ebook')">
+              📖 Explore Books
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" onclick="scrollToCatalog('audio')">
+              🎧 Explore Audio
+            </button>
+          </div>
+
+          <!-- Trust & Value Proposition Strip -->
+          <div class="hero-trust-strip">
+            <div class="trust-item">
+              <div class="trust-icon" aria-hidden="true">⚡</div>
+              <div class="trust-text">
+                <h4>Instant Delivery</h4>
+                <p>Immediate digital access</p>
+              </div>
+            </div>
+            <div class="trust-item">
+              <div class="trust-icon" aria-hidden="true">🎧</div>
+              <div class="trust-text">
+                <h4>Studio Audio</h4>
+                <p>High-fidelity narration</p>
+              </div>
+            </div>
+            <div class="trust-item">
+              <div class="trust-icon" aria-hidden="true">📱</div>
+              <div class="trust-text">
+                <h4>Read Anywhere</h4>
+                <p>Kindle, iPad &amp; Mobile</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero 3D Book & Audio Mockup Stage (CSS Generated) -->
+        <div class="hero-visual">
+          <div class="hero-mockup-stage">
+            <div class="hero-3d-book">
+              <div class="hero-book-cover">
+                <img src="assets/covers/book-001.svg" alt="3D Cover Mockup of Your First Ebook">
+              </div>
+              <div class="hero-book-pages" aria-hidden="true"></div>
+            </div>
+
+            <!-- Floating Audio Feature Card -->
+            <div class="hero-audio-card">
+              <div class="audio-card-wave" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="audio-card-info">
+                <h5>Audio Edition Included</h5>
+                <p>Listen on the go with chapter markers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. CATALOG & SEARCH SECTION -->
+    <section class="catalog-section" id="catalog-section">
+      <div class="container">
+        
+        <div class="catalog-header">
+          <span class="section-label">Curated Collection</span>
+          <h2 class="section-title">Featured Books &amp; Audio</h2>
+          <p class="section-subtitle">
+            Explore our curated digital library. Filter by format, search topics, or sort by pricing.
+          </p>
+        </div>
+
+        <!-- Filter, Search & Sort Toolbar -->
+        <div class="catalog-toolbar">
+          
+          <!-- Category Filter Tabs -->
+          <div class="filter-tabs-wrapper" role="tablist" aria-label="Filter products by format">
+            <button type="button" class="filter-tab-btn active" data-filter="all" role="tab" aria-selected="true">
+              All Formats
+            </button>
+            <button type="button" class="filter-tab-btn" data-filter="ebook" role="tab" aria-selected="false">
+              📖 Ebooks
+            </button>
+            <button type="button" class="filter-tab-btn" data-filter="audio" role="tab" aria-selected="false">
+              🎧 Audio Books
+            </button>
+          </div>
+
+          <!-- Real-Time Search Bar -->
+          <div class="search-wrapper">
+            <span class="search-icon-left" aria-hidden="true">🔍</span>
+            <input type="text" 
+                   id="search-input" 
+                   class="search-input-field" 
+                   placeholder="Search title, author, or keyword..." 
+                   aria-label="Search books and audio books">
+            <button type="button" id="search-clear-btn" class="search-clear-btn is-hidden" aria-label="Clear search">
+              &times;
+            </button>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="sort-wrapper">
+            <label for="sort-select" class="sort-label">Sort by:</label>
+            <select id="sort-select" class="sort-select" aria-label="Sort products">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Dynamic Products Grid Container -->
+        <div class="products-grid" id="products-grid">
+          <!-- Populated dynamically by products.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. ABOUT SECTION -->
+    <section class="about-section" id="about-section">
+      <div class="container about-grid">
+        
+        <div class="about-content">
+          <span class="section-label">Our Philosophy</span>
+          <h2 class="section-title">Built for Curious Minds &amp; Lifelong Learners</h2>
+          
+          <p class="about-lead">
+            PageRazor was founded on a simple premise: high-impact knowledge shouldn't be trapped in 400-page fluff or clunky platforms.
+          </p>
+
+          <p class="about-body">
+            Every ebook and audio book in our catalog is rigorously edited for clarity, depth, and immediate practical utility. Whether you absorb insights best via deep reading on your Kindle or through immersive audio while on your morning run, our products adapt to your lifestyle.
+          </p>
+
+          <div class="about-pillars">
+            <div class="pillar-card">
+              <div class="pillar-icon" aria-hidden="true">🎯</div>
+              <h4 class="pillar-title">100% Signal</h4>
+              <p class="pillar-desc">Practical playbooks distilled without unnecessary padding or filler.</p>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-icon" aria-hidden="true">🎧</div>
+              <h4 class="pillar-title">Pure Audio Fidelity</h4>
+              <p class="pillar-desc">Studio narrations engineered for maximum focus and retention.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-image-column">
+          <div class="hero-mockup-stage" style="height: auto;">
+            <div class="hero-3d-book" style="width: 250px; height: 350px;">
+              <div class="hero-book-cover">
+                <img src="assets/covers/book-003.svg" alt="Cover of Digital Growth Guide">
+              </div>
+              <div class="hero-book-pages" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. FAQ SECTION -->
+    <section class="faq-section" id="faq-section">
+      <div class="container">
+        
+        <div class="faq-header">
+          <span class="section-label">Questions &amp; Answers</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">
+            Everything you need to know about our digital bookstore, delivery formats, and future integrations.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>What is PageRazor?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>PageRazor is a modern digital bookstore dedicated to publishing and distributing concise, high-leverage ebooks and immersive audio editions. Our products focus on craft, career transitions, creator growth, and deep focus.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>What products can I buy?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>You can purchase digital ebooks (PDF and EPUB formats) and studio-recorded audio books (MP3 with chapter markers and action workbooks). In future phases, we will also offer bundle packages and companion digital toolkits.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>Can I buy ebooks?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>Yes. All ebooks are formatted for universal readability across Apple Books, Kindle, PDF readers, tablets, and smartphones.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>Can I buy audio books?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>Yes. Audio books are recorded in professional studios with dedicated narrators, crisp 320kbps audio quality, and include downloadable companion notes.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>How does payment work?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>In this Phase 1 frontend version, a simulated checkout demonstrates the ordering process. In Phase 5, PageRazor will integrate real Razorpay payments supporting UPI, Cards, NetBanking, and Wallets with server-side signature verification.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>When will I receive my purchase?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>Delivery is 100% digital and instantaneous. Once payment is confirmed, your products are automatically unlocked in your personal "My Library" dashboard.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>Can I access my purchases later?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>Yes. Your purchases are tied to your account with lifetime access. You can log in from any device to re-download your ebooks or stream your audio chapters.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-summary">
+              <span>Is my payment secure?</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            <div class="faq-content">
+              <p>Yes. When Razorpay is connected in Phase 5, all transactions will be processed via PCI-DSS compliant 256-bit encrypted channels. Sensitive keys and card credentials are never stored on frontend servers.</p>
+            </div>
+          </details>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       Site Footer
+       ======================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <span class="brand-icon-mark" aria-hidden="true">P</span>
+            <span class="brand-name">Page<span>Razor</span></span>
+          </a>
+          <p class="footer-tagline">
+            Ideas worth reading. Stories worth hearing.
+          </p>
+          <div class="footer-phase-notice">
+            <strong>Phase 1 Frontend Prototype:</strong> Clean vanilla client architecture prepared for Firebase Auth, Firestore &amp; Razorpay backend integration.
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <div class="footer-links">
+            <a href="#hero-section">Home</a>
+            <a href="#catalog-section" onclick="scrollToCatalog('ebook'); return false;">Books</a>
+            <a href="#catalog-section" onclick="scrollToCatalog('audio'); return false;">Audio Books</a>
+            <a href="#about-section">About PageRazor</a>
+            <a href="#faq-section">FAQ</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>My Account</h4>
+          <div class="footer-links">
+            <a href="#account" onclick="openAuthModal('login'); return false;">Login / Signup</a>
+            <a href="#library" onclick="openLibraryView(); return false;">My Library</a>
+            <a href="#cart" onclick="openCart(); return false;">Shopping Cart</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support &amp; Trust</h4>
+          <div class="footer-links">
+            <a href="mailto:support@pagerazor.com">support@pagerazor.com</a>
+            <a href="#faq-section">Payment Security</a>
+            <a href="#faq-section">Digital Delivery Guide</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 PageRazor. All rights reserved.</p>
+        <p>Built with vanilla HTML5, CSS3 &amp; Modern JavaScript.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODALS & DRAWERS
+       ======================================================================== -->
+
+  <!-- 1. Product Details Modal -->
+  <div class="modal-backdrop" id="product-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
+    <div class="modal-container">
+      <button type="button" class="modal-close-btn" onclick="closeProductModal()" aria-label="Close product details">&times;</button>
+      <div id="product-modal-content">
+        <!-- Rendered dynamically by products.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Shopping Cart Drawer -->
+  <div class="drawer-overlay" id="cart-drawer-overlay" aria-hidden="true"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-hidden="true" role="dialog" aria-label="Shopping Cart">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Shopping Cart</h3>
+      <button type="button" class="drawer-close-btn" onclick="closeCart()" aria-label="Close cart">&times;</button>
+    </div>
+
+    <div class="cart-items-list" id="cart-items-list">
+      <!-- Rendered dynamically by cart.js -->
+    </div>
+
+    <div class="drawer-footer">
+      <div class="cart-summary-line">
+        <span>Subtotal</span>
+        <span id="cart-subtotal-val">₹0</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Digital Delivery</span>
+        <span style="color: var(--color-success); font-weight: 600;">Instant (Free)</span>
+      </div>
+      <div class="cart-summary-line total-line">
+        <span>Estimated Total</span>
+        <span id="cart-total-val">₹0</span>
+      </div>
+
+      <button type="button" 
+              class="btn btn-primary btn-block btn-lg" 
+              id="cart-checkout-btn" 
+              onclick="handleCheckout()">
+        Checkout with Razorpay
+      </button>
+
+      <div class="cart-security-badge">
+        <span>🔒</span>
+        <span>Secure Digital Delivery · Phase 5 Ready</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 3. Razorpay Checkout Architecture Modal -->
+  <div class="modal-backdrop" id="checkout-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 560px;">
+      <button type="button" class="modal-close-btn" onclick="closeCheckoutModal()" aria-label="Close checkout">&times;</button>
+      <div id="checkout-modal-content">
+        <!-- Rendered dynamically by checkout.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Authentication Modal (Login / Signup / Forgot Password) -->
+  <div class="modal-backdrop" id="auth-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 480px;">
+      <button type="button" class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close dialog">&times;</button>
+      
+      <div class="auth-modal-card">
+        <div class="auth-header">
+          <h3 class="auth-title">Welcome to PageRazor</h3>
+          <span class="auth-disclaimer-pill">Phase 1 Frontend Demonstration</span>
+        </div>
+
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab-btn active" data-mode="login" onclick="switchAuthMode('login')">
+            Sign In
+          </button>
+          <button type="button" class="auth-tab-btn" data-mode="signup" onclick="switchAuthMode('signup')">
+            Create Account
+          </button>
+        </div>
+
+        <div id="auth-error-msg" class="auth-error-box is-hidden" role="alert"></div>
+
+        <!-- Login Form -->
+        <form id="auth-form-login" novalidate>
+          <div class="form-group">
+            <label for="login-email" class="form-label">Email Address</label>
+            <input type="email" id="login-email" class="form-input" placeholder="reader@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="login-password" class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <div class="form-footer-link">
+            <button type="button" class="link-btn" onclick="switchAuthMode('forgot')">Forgot password?</button>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            Sign In (Demo)
+          </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="auth-form-signup" class="is-hidden" novalidate>
+          <div class="form-group">
+            <label for="signup-name" class="form-label">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="Sarah Jenkins" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="signup-email" class="form-label">Email Address</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="reader@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password" class="form-label">Create Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="Minimum 6 characters" required autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm-password" class="form-label">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" class="form-input" placeholder="Re-type password" required autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            Create Account (Demo)
+          </button>
+        </form>
+
+        <!-- Forgot Password Form -->
+        <form id="auth-form-forgot" class="is-hidden" novalidate>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
+            Enter your registered email address and we'll send you a password recovery link.
+          </p>
+          <div class="form-group">
+            <label for="forgot-email" class="form-label">Email Address</label>
+            <input type="email" id="forgot-email" class="form-input" placeholder="reader@example.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            Send Reset Link (Demo)
+          </button>
+          <div style="text-align: center; margin-top: 14px;">
+            <button type="button" class="link-btn" onclick="switchAuthMode('login')">Back to Sign In</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 5. Account & My Library Modal -->
+  <div class="modal-backdrop" id="account-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 760px;">
+      <button type="button" class="modal-close-btn" onclick="closeAccountModal()" aria-label="Close account">&times;</button>
+      
+      <div class="account-modal-card">
+        <div class="account-header-bar">
+          <div class="account-tab-nav" role="tablist">
+            <button type="button" class="account-tab-nav-btn active" data-tab="account" onclick="switchAccountTab('account')">
+              My Profile
+            </button>
+            <button type="button" class="account-tab-nav-btn" data-tab="library" onclick="switchAccountTab('library')">
+              My Library 📚
+            </button>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="logoutUser()">
+            Sign Out
+          </button>
+        </div>
+
+        <!-- Tab 1: Profile -->
+        <div id="account-pane-profile">
+          <div class="account-profile-box">
+            <div class="profile-field">
+              <span class="profile-label">Name:</span>
+              <span class="profile-val" id="account-user-name">Reader</span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Email:</span>
+              <span class="profile-val" id="account-user-email">reader@example.com</span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Account Status:</span>
+              <span class="profile-val" style="color: var(--color-success);">Active (Demo Session)</span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Member Since:</span>
+              <span class="profile-val" id="account-user-member">September 2026</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" onclick="switchAccountTab('library')">
+              View My Purchased Books &amp; Audio &rarr;
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="closeAccountModal(); scrollToCatalog();">
+              Browse More Books
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 2: My Library -->
+        <div id="account-pane-library" class="is-hidden">
+          <div id="library-items-container">
+            <!-- Populated dynamically by auth.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ========================================================================
+       JavaScript Files (Zero-Dependency Modular Architecture)
+       ======================================================================== -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
